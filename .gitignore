@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+*.bak
+*.bak2
+*.bak_pre_bce
+
+# Secrets / env
+.env
+*.env
+
+# Databases
+*.db
+
+# Modèles / checkpoints (trop lourds pour GitHub)
+checkpoints/
+checkpoints_*/
+**/checkpoints/
+**/checkpoints_*/
+
+# Logs & training artifacts
+logs/
+logs_*/
+**/logs/
+**/logs_*/
+*.log
+overnight_master.log
+
+# Datasets (jamais sur GitHub)
+data/
+**/data/
+agent_guard/data/
+
+# Frontend
+node_modules/
+webapp/dist/
+
+# Divers
+.cache/
+reports/
+backend/data/uploads/
+backend/data/pdfs/
+backend/~/
+**/.torchxrayvision/
+.env

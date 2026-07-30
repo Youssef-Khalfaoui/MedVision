@@ -1,0 +1,113 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${DB_USER:-medvision}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-medvisionpass}
+      POSTGRES_DB: ${DB_NAME:-medvision}
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-medvision}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+    env_file: ./.env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${DB_USER:-medvision}:${DB_PASSWORD:-medvisionpass}@db:5432/${DB_NAME:-medvision}
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-medvision}
+      DB_USER: ${DB_USER:-medvision}
+      DB_PASSWORD: ${DB_PASSWORD:-medvisionpass}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      AI_API_URL: http://pipeline:8000/analyze
+      MEDVISION_UPLOAD_DIR: /app/data/uploads
+      MEDVISION_PDF_DIR: /app/data/pdfs
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8003:8000"
+    volumes:
+      - ./backend/data:/app/data
+
+  worker:
+    build:
+      context: ./backend
+    command: python start_worker.py
+    healthcheck:
+      disable: true
+    env_file: ./.env
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-medvision}
+      DB_USER: ${DB_USER:-medvision}
+      DB_PASSWORD: ${DB_PASSWORD:-medvisionpass}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      AI_API_URL: http://pipeline:8000/analyze
+      MEDVISION_UPLOAD_DIR: /app/data/uploads
+      MEDVISION_PDF_DIR: /app/data/pdfs
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend/data:/app/data
+
+  pipeline:
+    build:
+      context: ./pipeline
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./agent_guard/checkpoints:/workspace/agent_guard/checkpoints:ro
+      - ./agent_guard/src:/workspace/agent_guard/src:ro
+      - ./agent_1_v2/checkpoints:/workspace/agent_1_v2/checkpoints:ro
+      - ./agent_1_v2/src:/workspace/agent_1_v2/src:ro
+      - ./agent_1_5_comparator/src:/workspace/agent_1_5_comparator/src:ro
+      - ./agent_2_report/checkpoints:/workspace/agent_2_report/checkpoints:ro
+      - ./agent_2_report/src:/workspace/agent_2_report/src:ro
+      - ./agent_3_validator/src:/workspace/agent_3_validator/src:ro
+      - /root/dataset/label_output:/data/label_output:ro
+      - hf_cache:/root/.cache/huggingface
+
+  webapp:
+    build:
+      context: ./webapp
+    ports:
+      - "8080:4173"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+  hf_cache:

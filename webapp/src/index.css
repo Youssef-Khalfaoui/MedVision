@@ -1,0 +1,95 @@
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+/* Anime.js targets need to exist before animation; keep them visible by default
+   and let the JS-driven entrance handle initial state to avoid flash. */
+
+/* Responsive design */
+@media (max-width: 1024px) {
+  body {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 13px;
+  }
+  
+  button {
+    font-size: 0.8rem !important;
+    padding: 0.4rem 0.8rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 12px;
+  }
+  
+  button {
+    font-size: 0.75rem !important;
+    padding: 0.35rem 0.6rem !important;
+  }
+  
+  h1 {
+    font-size: 1rem !important;
+  }
+  
+  h2 {
+    font-size: 0.95rem !important;
+  }
+}
+
+/* PatientMain responsive logo and header */
+@media (max-width: 768px) {
+  .pm-header img {
+    height: 100px !important;
+    width: 100px !important;
+  }
+  
+  .pm-header > div {
+    padding-left: 110px !important;
+    min-height: 80px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .pm-header img {
+    height: 70px !important;
+    width: 70px !important;
+  }
+  
+  .pm-header > div {
+    padding-left: 80px !important;
+    min-height: 60px !important;
+  }
+}
+
+/* Responsive cards */
+@media (max-width: 768px) {
+  .auth-card {
+    width: 95% !important;
+  }
+  
+  .splash-logo {
+    height: 350px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    width: 100% !important;
+  }
+  
+  .splash-logo {
+    height: 250px !important;
+  }
+}

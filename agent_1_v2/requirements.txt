@@ -1,0 +1,17 @@
+# torch/torchvision are already in the base image (2.1.0+cu118) - not reinstalled
+numpy==1.26.4
+pandas==2.1.4
+scikit-learn==1.4.0
+scikit-image==0.22.0
+Pillow==10.2.0
+opencv-python-headless==4.9.0.80
+tqdm==4.66.1
+pyyaml==6.0.1
+tensorboard==2.16.2
+matplotlib==3.8.2
+# New for agent_1_v2 (ConvNeXtV2 backbone via timm, loaded from HF Hub)
+timm==0.9.16
+huggingface_hub==0.23.0
+safetensors==0.4.3
+# HGAT (Hierarchical Graph Attention) in Agent 1
+torch-geometric==2.6.1
