@@ -1,0 +1,15 @@
+# Keep secrets and local junk out of the build context (the Dockerfile does
+# `COPY . .`, so anything listed here would otherwise be baked into the image).
+.env
+.env.*
+**/__pycache__
+**/*.pyc
+**/.pytest_cache
+**/.mypy_cache
+.git
+.gitignore
+data/
+*.db
+*.log
+tests/
+README.md

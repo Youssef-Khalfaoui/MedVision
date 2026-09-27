@@ -1,0 +1,74 @@
+# Python
+__pycache__/
+*.pyc
+.idea/
+.vscode/
+
+# LaTeX build artefacts and working zips
+MedVision-Report-LaTeX.zip
+MedVision-Report-LaTeX/
+
+
+.pytest_cache/
+*.bak
+*.bak2
+*.bak_pre_bce
+
+# Secrets / env
+.env
+*.env
+
+# Databases
+*.db
+
+# Modèles / checkpoints (trop lourds pour GitHub)
+checkpoints/
+checkpoints_*/
+**/checkpoints/
+**/checkpoints_*/
+
+# Logs & training artifacts
+logs/
+# Documentation & Reports (do not upload to project repo)
+litho.docs/
+report-latex/
+litho.toml
+make-docs-pdf.py
+run-litho.ps1
+.litho/
+
+
+logs_*/
+**/logs/
+**/logs_*/
+*.log
+overnight_master.log
+
+# Datasets (jamais sur GitHub)
+data/
+**/data/
+agent_guard/data/
+
+# Frontend
+node_modules/
+webapp/dist/
+
+# Divers
+.cache/
+reports/
+backend/data/uploads/
+backend/data/pdfs/
+backend/~/
+**/.torchxrayvision/
+
+# Litho (deepwiki-rs) generated docs — AI architecture documentation
+# Uncomment the two lines below if you don't want to commit generated docs
+# litho.docs/
+.litho/cache/
+litho.docs/pdf-build/
+loop-*.log
+loop.log
+run*.log
+run*.err.log
+run*.out.log
+run*.pid
